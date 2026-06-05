@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buat Kamu, Chantika 🌸</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink: #f472b6;
+    --rose: #fb7185;
+    --deep: #9d174d;
+    --blush: #fce7f3;
+    --cream: #fff7f0;
+    --gold: #f59e0b;
+    --white: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--cream);
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ===== FLOATING HEARTS BG ===== */
+  .hearts-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .heart-float {
+    position: absolute;
+    bottom: -80px;
+    font-size: 1.4rem;
+    animation: floatUp linear infinite;
+    opacity: 0;
+  }
+  @keyframes floatUp {
+    0%   { transform: translateY(0) rotate(-15deg); opacity: 0; }
+    10%  { opacity: 0.6; }
+    90%  { opacity: 0.3; }
+    100% { transform: translateY(-110vh) rotate(15deg); opacity: 0; }
+  }
+
+  /* ===== MAIN WRAPPER ===== */
+  .wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 30px 20px 60px;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    text-align: center;
+    padding: 50px 20px 30px;
+    animation: fadeDown 1s ease both;
+  }
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero .tag {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--pink), var(--rose));
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    border-radius: 50px;
+    margin-bottom: 22px;
+    box-shadow: 0 4px 15px rgba(244,114,182,0.4);
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 8vw, 3.5rem);
+    color: var(--deep);
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .hero h1 span {
+    font-style: italic;
+    color: var(--pink);
+  }
+  .hero .sub {
+    font-size: 1rem;
+    color: #9f6e82;
+    font-weight: 400;
+    margin-top: 10px;
+  }
+
+  /* ===== PHOTO SLOT ===== */
+  .photo-section {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin: 30px 0;
+    animation: fadeUp 1s 0.3s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .photo-frame {
+    width: 180px;
+    height: 220px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(244,114,182,0.35);
+    border: 4px solid white;
+    position: relative;
+    background: linear-gradient(135deg, #fce7f3, #fbcfe8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .photo-frame:hover {
+    transform: translateY(-8px) rotate(-2deg);
+    box-shadow: 0 16px 40px rgba(244,114,182,0.5);
+  }
+  .photo-frame:nth-child(2) { transform: rotate(3deg); margin-top: 20px; }
+  .photo-frame:nth-child(2):hover { transform: rotate(3deg) translateY(-8px); }
+  .photo-frame img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: none;
+  }
+  .photo-frame img.loaded { display: block; }
+  .photo-placeholder {
+    text-align: center;
+    padding: 15px;
+  }
+  .photo-placeholder .icon { font-size: 2.5rem; margin-bottom: 8px; }
+  .photo-placeholder p {
+    font-size: 0.78rem;
+    color: #c084a0;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+  .photo-label {
+    position: absolute;
+    bottom: 10px;
+    background: rgba(255,255,255,0.85);
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--deep);
+    padding: 4px 10px;
+    border-radius: 50px;
+  }
+  /* hidden input */
+  .photo-frame input[type="file"] {
+    position: absolute; inset: 0;
+    opacity: 0; cursor: pointer; width: 100%; height: 100%;
+  }
+
+  /* ===== LETTER CARD ===== */
+  .letter-card {
+    background: white;
+    border-radius: 28px;
+    padding: 40px 35px;
+    box-shadow: 0 10px 40px rgba(244,114,182,0.15);
+    border: 2px solid #fce7f3;
+    margin: 30px 0;
+    position: relative;
+    animation: fadeUp 1s 0.5s ease both;
+  }
+  .letter-card::before {
+    content: '"';
+    font-family: 'Playfair Display', serif;
+    font-size: 8rem;
+    color: #fce7f3;
+    position: absolute;
+    top: -10px; left: 20px;
+    line-height: 1;
+    pointer-events: none;
+  }
+  .letter-card h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: var(--deep);
+    margin-bottom: 20px;
+  }
+  .letter-card p {
+    font-size: 0.97rem;
+    color: #5c3d51;
+    line-height: 1.9;
+    margin-bottom: 14px;
+  }
+  .letter-card p strong {
+    color: var(--rose);
+    font-weight: 700;
+  }
+  .letter-card .sign {
+    text-align: right;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: var(--pink);
+    font-size: 1.1rem;
+    margin-top: 20px;
+  }
+
+  /* ===== REASONS ===== */
+  .reasons-title {
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.7rem;
+    color: var(--deep);
+    margin: 40px 0 24px;
+    animation: fadeUp 1s 0.6s ease both;
+  }
+  .reasons-title span { color: var(--pink); font-style: italic; }
+
+  .reason-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    animation: fadeUp 1s 0.7s ease both;
+  }
+  @media (max-width: 480px) { .reason-list { grid-template-columns: 1fr; } }
+  .reason-item {
+    background: white;
+    border-radius: 18px;
+    padding: 20px 18px;
+    border: 2px solid #fce7f3;
+    box-shadow: 0 4px 15px rgba(244,114,182,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .reason-item::after {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 90px; height: 90px;
+    background: radial-gradient(circle, #fce7f3 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .reason-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(244,114,182,0.25);
+  }
+  .reason-item .emoji { font-size: 1.8rem; margin-bottom: 8px; }
+  .reason-item h4 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--deep);
+    margin-bottom: 5px;
+  }
+  .reason-item p {
+    font-size: 0.8rem;
+    color: #9f6e82;
+    line-height: 1.5;
+  }
+
+  /* ===== VIDEO SLOT ===== */
+  .video-section {
+    margin: 40px 0;
+    animation: fadeUp 1s 0.8s ease both;
+  }
+  .video-section h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: var(--deep);
+    text-align: center;
+    margin-bottom: 18px;
+  }
+  .video-frame {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: linear-gradient(135deg, #fce7f3, #fbcfe8);
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(244,114,182,0.25);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid white;
+  }
+  .video-frame video {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: none;
+    border-radius: 18px;
+  }
+  .video-frame video.loaded { display: block; }
+  .video-placeholder {
+    text-align: center;
+    padding: 20px;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+  }
+  .video-placeholder .play-btn {
+    width: 70px; height: 70px;
+    background: linear-gradient(135deg, var(--pink), var(--rose));
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 14px;
+    box-shadow: 0 6px 20px rgba(244,114,182,0.5);
+    font-size: 1.6rem;
+    transition: transform 0.3s;
+  }
+  .video-placeholder:hover .play-btn { transform: scale(1.1); }
+  .video-placeholder p { font-size: 0.85rem; color: #c084a0; font-weight: 600; }
+  .video-frame input[type="file"] {
+    position: absolute; inset: 0;
+    opacity: 0; cursor: pointer; width: 100%; height: 100%;
+  }
+
+  /* ===== PROMISE BOX ===== */
+  .promise-box {
+    background: linear-gradient(135deg, var(--deep) 0%, #be185d 100%);
+    border-radius: 28px;
+    padding: 40px 35px;
+    text-align: center;
+    color: white;
+    margin: 40px 0;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 1s 0.9s ease both;
+  }
+  .promise-box::before {
+    content: '💕';
+    position: absolute;
+    font-size: 10rem;
+    top: -30px; right: -20px;
+    opacity: 0.08;
+    pointer-events: none;
+  }
+  .promise-box h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .promise-list {
+    list-style: none;
+    text-align: left;
+    max-width: 380px;
+    margin: 0 auto 24px;
+    position: relative;
+  }
+  .promise-list li {
+    padding: 10px 0;
+    font-size: 0.92rem;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.5;
+  }
+  .promise-list li:last-child { border-bottom: none; }
+  .promise-list li .check { font-size: 1rem; flex-shrink: 0; margin-top: 2px; }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    text-align: center;
+    padding: 20px;
+    animation: fadeUp 1s 1s ease both;
+  }
+  .footer .name-big {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 7vw, 3rem);
+    font-style: italic;
+    background: linear-gradient(135deg, var(--pink), var(--rose), var(--deep));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .footer .hearts-row {
+    font-size: 1.5rem;
+    letter-spacing: 6px;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50%       { transform: scale(1.15); }
+  }
+
+  /* ===== TOAST ===== */
+  .toast {
+    position: fixed;
+    bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
+    background: var(--deep);
+    color: white;
+    padding: 12px 28px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    z-index: 999;
+    transition: transform 0.4s ease;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* ===== SPARKLE CLICK ===== */
+  .sparkle {
+    position: fixed;
+    pointer-events: none;
+    font-size: 1.2rem;
+    animation: sparkleAnim 0.8s ease forwards;
+    z-index: 999;
+  }
+  @keyframes sparkleAnim {
+    0%   { transform: translate(-50%,-50%) scale(0); opacity: 1; }
+    100% { transform: translate(-50%,-130%) scale(1.5); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Floating hearts background -->
+<div class="hearts-bg" id="heartsBg"></div>
+
+<div class="wrapper">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="tag">✨ Special for you ✨</div>
+    <h1>Hey, <span>Chantika</span> 🌸</h1>
+    <p class="sub">ada sesuatu yang pengen banget aku sampaiin ke kamu...</p>
+  </div>
+
+  <!-- PHOTO SLOTS -->
+  <div class="photo-section">
+    <div class="photo-frame" id="frame1" title="Klik untuk upload foto">
+      <img id="img1" alt="Foto Chantika">
+      <div class="photo-placeholder" id="ph1">
+        <div class="icon">📸</div>
+        <p>Taruh foto<br>kamu di sini</p>
+      </div>
+      <span class="photo-label">📌 Chantika</span>
+      <input type="file" accept="image/*" onchange="loadPhoto(this, 'img1', 'ph1')">
+    </div>
+    <div class="photo-frame" id="frame2" title="Klik untuk upload foto">
+      <img id="img2" alt="Foto Berdua">
+      <div class="photo-placeholder" id="ph2">
+        <div class="icon">🤳</div>
+        <p>Foto kamu<br>yang lainnya</p>
+      </div>
+      <span class="photo-label">💕 My fav</span>
+      <input type="file" accept="image/*" onchange="loadPhoto(this, 'img2', 'ph2')">
+    </div>
+    <div class="photo-frame" title="Klik untuk upload foto">
+      <img id="img3" alt="Foto Lagi">
+      <div class="photo-placeholder" id="ph3">
+        <div class="icon">🌸</div>
+        <p>Satu lagi<br>dong 🥺</p>
+      </div>
+      <span class="photo-label">🌷 Cantik</span>
+      <input type="file" accept="image/*" onchange="loadPhoto(this, 'img3', 'ph3')">
+    </div>
+  </div>
+
+  <!-- LETTER -->
+  <div class="letter-card">
+    <h2>Chantika Ratu Herlambang,</h2>
+    <p>
+      Jujur ya, nulis ini tuh deg-degan banget. Tapi kalau nggak ditulis, kayaknya bakal nyesel seumur hidup deh 😅
+    </p>
+    <p>
+      Kamu itu <strong>beda banget</strong> dari semua orang yang pernah aku kenal. Entah dari cara kamu ketawa, cara kamu mikir, atau bahkan cara kamu marah — semuanya bikin aku selalu pengen ada di deket kamu.
+    </p>
+    <p>
+      Aku nggak mau lebay, tapi beneran — tiap hari yang ada kamu di dalamnya itu rasanya <strong>jauh lebih berwarna</strong>. Kayak dunia tiba-tiba upgrade ke HD padahal tadinya cuma 360p 😂
+    </p>
+    <p>
+      Kamu mungkin nggak sadar, tapi hal-hal kecil yang kamu lakuin — senyum kamu, candaan kamu yang random, atau waktu kamu cerita hal sepele — itu semua <strong>selalu aku inget</strong>. Nggak ada satu pun yang terlupa.
+    </p>
+    <p>
+      Dan sekarang aku cuma mau bilang: aku serius. Bukan cuma sebentar, bukan cuma seneng-seneng doang. Aku pengen jadi orang yang selalu ada buat kamu — di hari-hari yang baik, maupun yang nggak baik.
+    </p>
+    <div class="sign">— with all my heart 💕</div>
+  </div>
+
+  <!-- REASONS -->
+  <div class="reasons-title">Kenapa <span>Kamu?</span> 🤍</div>
+  <div class="reason-list">
+    <div class="reason-item">
+      <div class="emoji">😂</div>
+      <h4>Kamu lucu banget</h4>
+      <p>Ketawa kamu tuh contagious parah. Sekali ketawa, aku nggak bisa berhenti ikutan.</p>
+    </div>
+    <div class="reason-item">
+      <div class="emoji">💡</div>
+      <h4>Smart & thoughtful</h4>
+      <p>Cara kamu ngeliat sesuatu tuh beda. Kamu mikir lebih dalam dari yang orang kira.</p>
+    </div>
+    <div class="reason-item">
+      <div class="emoji">🤗</div>
+      <h4>Selalu bikin nyaman</h4>
+      <p>Di deket kamu itu rasanya aman. Nggak perlu jadi seseorang yang bukan diri sendiri.</p>
+    </div>
+    <div class="reason-item">
+      <div class="emoji">✨</div>
+      <h4>Naturally gorgeous</h4>
+      <p>Cantik kamu tuh bukan dibuat-buat. Dan itu yang bikin makin susah buat di-ignore.</p>
+    </div>
+    <div class="reason-item">
+      <div class="emoji">💪</div>
+      <h4>Kuat & mandiri</h4>
+      <p>Kamu bisa handle banyak hal sendiri. Itu salah satu hal yang paling aku respect.</p>
+    </div>
+    <div class="reason-item">
+      <div class="emoji">🌙</div>
+      <h4>Ada di pikiran terus</h4>
+      <p>Random tapi beneran — hari nggak kerasa lengkap kalau nggak ingat kamu.</p>
+    </div>
+  </div>
+
+  <!-- VIDEO SLOT -->
+  <div class="video-section">
+    <h3>🎬 Video buat kamu</h3>
+    <div class="video-frame" id="videoFrame">
+      <video id="myVideo" controls></video>
+      <div class="video-placeholder" id="vph">
+        <div class="play-btn">▶️</div>
+        <p>Klik di sini untuk upload video spesial 🎥</p>
+      </div>
+      <input type="file" accept="video/*" onchange="loadVideo(this)">
+    </div>
+  </div>
+
+  <!-- PROMISE BOX -->
+  <div class="promise-box">
+    <h3>💌 Yang aku janjiin ke kamu</h3>
+    <ul class="promise-list">
+      <li><span class="check">💫</span> Selalu jadi tempat cerita yang aman, tanpa judge apapun.</li>
+      <li><span class="check">🛡️</span> Nggak bakal biarin kamu ngerasa sendirian kalau lagi berat.</li>
+      <li><span class="check">😄</span> Usahain bikin kamu ketawa setiap hari, serius deh.</li>
+      <li><span class="check">🙏</span> Jujur terus, bahkan kalau jujurnya susah.</li>
+      <li><span class="check">🌱</span> Tumbuh bareng — bukan nahan kamu, tapi dukung kamu.</li>
+      <li><span class="check">❤️</span> Jaga perasaan kamu kayak aku jaga hal yang paling penting.</li>
+    </ul>
+    <p style="font-size:0.85rem; opacity:0.8; position:relative;">Ini bukan kata-kata doang. Ini serius. 🤞</p>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <span class="name-big">Chantika Ratu Herlambang</span>
+    <div class="hearts-row">💕 🌸 💕 🌸 💕</div>
+    <p style="color:#c084a0; font-size:0.85rem; margin-top:14px; font-style:italic;">
+      "Kamu bukan cuma seseorang yang aku suka — kamu seseorang yang bikin aku pengen jadi lebih baik."
+    </p>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">📸 Foto berhasil diupload!</div>
+
+<script>
+  // ===== FLOATING HEARTS =====
+  const heartsBg = document.getElementById('heartsBg');
+  const emojis = ['💕','🌸','💗','✨','🌷','💖','🩷','🌹'];
+  for (let i = 0; i < 18; i++) {
+    const h = document.createElement('div');
+    h.className = 'heart-float';
+    h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    h.style.left = Math.random() * 100 + '%';
+    h.style.fontSize = (0.9 + Math.random() * 1.2) + 'rem';
+    h.style.animationDuration = (8 + Math.random() * 12) + 's';
+    h.style.animationDelay = (Math.random() * 10) + 's';
+    heartsBg.appendChild(h);
+  }
+
+  // ===== LOAD PHOTO =====
+  function loadPhoto(input, imgId, phId) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = document.getElementById(imgId);
+      const ph  = document.getElementById(phId);
+      img.src = e.target.result;
+      img.classList.add('loaded');
+      ph.style.display = 'none';
+      showToast('📸 Foto berhasil diupload! So cute! 🌸');
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // ===== LOAD VIDEO =====
+  function loadVideo(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const video = document.getElementById('myVideo');
+    const ph    = document.getElementById('vph');
+    video.src = URL.createObjectURL(file);
+    video.classList.add('loaded');
+    ph.style.display = 'none';
+    showToast('🎬 Video berhasil diupload! 💕');
+  }
+
+  // ===== TOAST =====
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  // ===== SPARKLE ON CLICK =====
+  document.addEventListener('click', e => {
+    const sparks = ['💕','✨','🌸','💫','🩷'];
+    const el = document.createElement('div');
+    el.className = 'sparkle';
+    el.textContent = sparks[Math.floor(Math.random() * sparks.length)];
+    el.style.left = e.clientX + 'px';
+    el.style.top  = e.clientY + 'px';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 800);
+  });
+</script>
+</body>
+</html>
